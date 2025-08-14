@@ -16,13 +16,15 @@ def encode_str(s:str)-> bytes:
 def init_fernet():
     key = os.getenv("FERNET_KEY")
     if key:
-        f = Fernet(key)
+        # encode the key to make it into bytes...
+        encoded_key = key.encode()
+        f = Fernet(encoded_key)
         return f
     else:
         raise ValueError("FERNET_KEY env var is INVALID or MISSING. Can not init fernet")
 
 
-def encrypt_fermet(s:bytes, process:Optional[str]):
+def encrypt_fernet(s:bytes, process:Optional[str]):
     fernet_obj = init_fernet()
     encrypted_string = fernet_obj.encrypt(s)
     if encrypted_string:

@@ -9,7 +9,8 @@ from datetime import datetime, date
 
 class User(SQLModel, table=True):
     id: uuid.UUID = Field(uuid.uuid4, primary_key=True)
-    hashed_password: str
+    username: str = Field()
+    hashed_password: str = Field(unique=True)
     email: str = Field(unique=True)
 
 class ShopifyProfile(SQLModel, table=True):
