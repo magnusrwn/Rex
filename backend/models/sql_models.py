@@ -12,6 +12,7 @@ class User(SQLModel, table=True):
     username: str = Field()
     hashed_password: str = Field(unique=True)
     email: str = Field(unique=True)
+    isEmailAuthed: bool = Field(False)
 
 class ShopifyProfile(SQLModel, table=True):
     id: uuid.UUID = Field(uuid.uuid4, primary_key=True)

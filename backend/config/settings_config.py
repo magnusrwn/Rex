@@ -26,6 +26,8 @@ class Settings(BaseSettings):
     # Auth
     FERNET_KEY: str # must be encoded to bytes
 
+    
+
 
 settings = Settings()
 
