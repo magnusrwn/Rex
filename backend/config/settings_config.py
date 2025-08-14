@@ -11,7 +11,7 @@ class Settings(BaseSettings):
     SQL_HOST: str
     SQL_PORT: 3306
     SQL_USER: str
-    SQL_NAME: str
+    SQL_DB: str
     # used on live server... Just verifies identity(s)
     SQL_SSL_CERT_PATH: str | None = None # in certificates folder
 
@@ -21,7 +21,13 @@ class Settings(BaseSettings):
     def SQL_DATABASE_URI(self) -> str:
         db_password = self.SQL_PASSWORD.get_secret_value()
         # this is not a callable function, but allows for 'SQL_DATABASE_URI' as a usable variable to pass into the creation of the engine.
-        return f"mysql+pymysql://{self.SQL_USER}:{db_password}@{self.SQL_HOST}:{self.SQL_PORT}/{self.SQL}"
+        return f"mysql+pymysql://{self.SQL_USER}:{db_password}@{self.SQL_HOST}:{self.SQL_PORT}/{self.SQL_DB}"
+
+    # Auth
+    FERNET_KEY: str # must be encoded to bytes
+
+    
+
 
 settings = Settings()
 
