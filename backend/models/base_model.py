@@ -15,12 +15,16 @@ class TokenData(BaseModel):
 
 # only ever expose this in frontend-backend communication
 class UserPublic(BaseModel):
-    id: uuid.UUID
     email: str
     username:str
 # use this within the backend
 class UserInDB(UserPublic):
     hashed_password: str
+
+class SignUpUser(BaseModel):
+    email: str
+    username: str
+    password: str
 
 class GetUserEndpointBody(BaseModel):
     username: str
