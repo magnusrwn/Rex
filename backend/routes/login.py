@@ -5,8 +5,9 @@ from typing import Annotated
 from models.base_model import *
 from sqlmodel import Session
 from config.dependencies import get_session, get_client, get_current_user
-import httpx
-
+from config.crud import create_user
+from routes.email_processes import send_email_for_verify
+from routes.db_endpoints import create_user_endpoint
 
 router = APIRouter(prefix='/login')
 
@@ -47,32 +48,39 @@ async def login(session: Session = Depends(get_session), form_data: OAuth2Passwo
     }
 
 @router.post('/signup')
-async def sign_up(new_user: SignUpUser, session: Session = Depends(get_session), client: httpx.AsyncClient = Depends(get_client)):
+async def sign_up(new_user: SignUpUser, session: Session = Depends(get_session)):
     user_exist = check_user_exists(session, new_user.email, new_user.username)
     # returns response code
     if user_exist["status_code"] != 200:
         details = {"message":user_exist["message"]}
         raise HTTPException(status_code=user_exist["status_code"], detail=details)
     
-    # if the users detaiuls are not already in use...
     # hashing the inputed password/ detail gathering
     hashed_password = get_password_hash(new_user.password)
     username = new_user.username
     email = new_user.email
 
-    JSON = {
+    user = {
         "username": username,
         "hashed_password": hashed_password,
-        "email": email
+        "email": email,
+        "isActive": True,
     }
-    response = await client.post('/create-user', json=JSON)
+    response = create_user_endpoint(session, user)
     if response["status_code"] != 200:
-        details = {"message":"failed to input new user into db, please try again later"}
+        details = {"message":response["message"]}
         raise HTTPException(status_code=500, detail=details)
     
-    # if all is good and added, return the email and status code (email for prompy to verify email)
+    # if auth email send returns poor... raise
+    send_autuh_email_response = await send_email_for_verify(new_user.email)
+    if send_autuh_email_response["status_code"] != 200:
+        details = {"message":"could not send the email to auth. Incomplete status for making the user."}
+        raise HTTPException(status_code=send_autuh_email_response["status_code"],detail=details)
+    # if the above hits, the user is created, but not authed... so cant do anything...
+
+
     return {
         "status_code":200,
         "user_email": new_user.email,
-        "message":"successfully added user to db"
-    }   
+        "message":"successfully added user to db, send sent auth email"
+    }

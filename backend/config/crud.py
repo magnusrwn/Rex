@@ -1,20 +1,20 @@
-# creates, reads, updates, and deletes users from db
+# USER CRUD ONLY
 from models.sql_models import User
 from sqlmodel import Session, select, create_engine
 
 
 # will need password imports from 'security' file...
-def create_user(session:Session, u:User) -> bool:
-    new_user = User(u)
-    session.add(new_user)
+def create_user(session:Session, u:dict) -> bool:
     try:
+        new_user = User(**u)
+        session.add(new_user)
         session.commit()
-        session.refresh()
+        session.refresh(new_user)
         return {"status_code": 200}
-    except:
-        return {"status_code":500, "message":"Databsae error creating user"}
+    except Exception as e:
+        return {"status_code":500, "message":f"Databsae error creating user. Return message: {e}"}
 
-def delete_user(session: Session, u:User):
+def delete_user(session: Session, u: User):
     '''
     Just sets 'isActive to False
     '''
@@ -26,7 +26,7 @@ def delete_user(session: Session, u:User):
             user.isActive = False
             session.add(user)
             session.commit()
-            session.refresh()
+            session.refresh(user)
         else:
             return{
                 "status_code":500,
@@ -37,5 +37,14 @@ def delete_user(session: Session, u:User):
             "status_code":500,
             "message":"databse encountereed an error in query. Please try again and/ or report the issue"
         }
+
+def change_username():
+    pass
+
+def change_email():
+    pass
+
+def change_password():
+    pass
 
 

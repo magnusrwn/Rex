@@ -7,9 +7,9 @@ class Settings(BaseSettings):
     model_config = SettingsConfigDict(env_file='.env', env_ignore_empty=True, extra='ignore') # looks in the env and .env for all vars... skips empty and extra vars (skip means not throwing an err)
 
     # DB Settings:
-    SQL_PASSWORD = SecretStr
+    SQL_PASSWORD: SecretStr
     SQL_HOST: str
-    SQL_PORT: 3306
+    SQL_PORT: int = 3306
     SQL_USER: str
     SQL_DB: str
     # used on live server... Just verifies identity(s)

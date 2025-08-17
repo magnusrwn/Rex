@@ -3,7 +3,7 @@ from datetime import date, datetime
 from pydantic import BaseModel
 import uuid
 
-from sql_models import *
+from models.sql_models import *
 
 # Models for security.py
 class Token(BaseModel):

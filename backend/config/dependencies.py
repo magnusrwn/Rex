@@ -1,4 +1,3 @@
-from passlib.context import CryptContext
 from fastapi import Depends, APIRouter, HTTPException, status
 from fastapi.security import OAuth2PasswordBearer
 import jwt
@@ -18,8 +17,8 @@ load_dotenv()
 oauth2_scheme = OAuth2PasswordBearer(tokenUrl="token")
 
 
-ALGORITHM = os.environ("ALGORITHM")
-SECRET_KEY = os.environ("SECRET_KEY")
+ALGORITHM = os.getenv("ALGORITHM")
+SECRET_KEY = os.getenv("SECRET_KEY")
 
 
 # -- funcs --
@@ -27,8 +26,8 @@ def get_session():
     with Session(engine) as session:
         yield session
 
-def get_client():
-    with httpx.AsyncClient() as cleint:
+async def get_client():
+    async with httpx.AsyncClient() as cleint:
         yield cleint
 
 async def get_current_user(token: Annotated[str, Depends(oauth2_scheme)], session: Session = Depends(get_session)):

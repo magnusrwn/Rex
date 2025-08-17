@@ -8,28 +8,27 @@ import jwt
 from fastapi import Depends, FastAPI, HTTPException, status
 from fastapi.security import OAuth2PasswordBearer, OAuth2PasswordRequestForm
 from jwt.exceptions import InvalidTokenError
-from passlib.context import CryptContext
 from pydantic import BaseModel
 from sqlmodel import Session, select, and_
 from Main import app
-from utils import get_session, get_user
+from utils import get_user
 import secrets
+import bcrypt
 
 
 load_dotenv()
 
-SECRET_KEY = os.environ("SECRET_KEY")
-ALGORITHM = os.environ("ALGORITHM")
+SECRET_KEY = os.getenv("SECRET_KEY")
+ALGORITHM = os.getenv("ALGORITHM")
 
-pwd_context = CryptContext(schemes=['bcrypt'], ) # used for encrypting a decrypting
 # oauth2_scheme = OAuth2PasswordBearer(tokenUrl="token")
 
 # -- funcs --
-def verify_password(plain_password, hashed_password):
-    return pwd_context.verify(plain_password, hashed_password)
+def verify_password(plain_password: str, hashed_password: str) -> bool:
+    return bcrypt.checkpw(plain_password.encode("utf-8"), hashed_password.encode("utf-8"))
 
-def get_password_hash(password):
-    return pwd_context.hash(password)
+def get_password_hash(password: str) -> str:
+    return bcrypt.hashpw(password.encode("utf-8"), bcrypt.gensalt()).decode("utf-8")
 
 def create_access_token(data: dict):
     ''''
@@ -72,7 +71,8 @@ def check_user_exists(session: Session, email: str, username: str) -> bool:
     email_q = select(User).where(User.email == email)
     email_response = session.exec(email_q).first()
     if email_response:
-        return {"status_code":400, "message":"Email already in use"}
+        if email_response.isActive == True: return {"status_code":400, "message":"Email already in use"}
+        pass
     username_q = select(User).where(User.username == username)
     username_response = session.exec(username_q).first()
     if username_response:
@@ -80,20 +80,13 @@ def check_user_exists(session: Session, email: str, username: str) -> bool:
     
     return {"status_code":200}
 
-# async def email_auth(session: Session, email: str):
-    # # create a random code
-    # random_token = secrets.token_urlsafe(32)
-    # email_token_payload = {
-    #     "token": random_token,
-    #     "email": email
-    # }
+def email_verification(email: str):
+    '''
+    Sends an email verification link, and updates 'isVerified' in the db
+    '''
     
+    pass
 
-
-
-    # make that into a link 
-    # add to auth table
-    
-    
-    # send the email...
+def reset_password():
+    pass
 

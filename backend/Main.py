@@ -3,7 +3,7 @@ from fastapi import FastAPI, APIRouter, routing
 from fastapi.middleware.cors import CORSMiddleware
 from dotenv import load_dotenv
 from sqlmodel import Session, SQLModel
-from config.init_db import init_db
+from models.sql_models import *
 
 load_dotenv()
 

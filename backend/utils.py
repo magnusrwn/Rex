@@ -4,12 +4,9 @@ from dotenv import load_dotenv
 import os
 import asyncio
 from typing import Optional
-from sqlmodel import Session, select, and_
+from sqlmodel import Session, select
 from sqlite3 import DatabaseError
-from fastapi import Depends
-from config.dependencies import get_session
 from models.sql_models import User
-from datetime import date, datetime, timedelta
 
 load_dotenv()
 
