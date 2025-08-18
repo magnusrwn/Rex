@@ -1,17 +1,14 @@
+# all login endpoints form login .services file
 from fastapi import FastAPI, Depends, APIRouter, HTTPException, status
 from config.security import authenticate_user, create_access_token, check_user_exists, get_password_hash
 from fastapi.security import OAuth2PasswordRequestForm
-from typing import Annotated
 from models.base_model import *
 from sqlmodel import Session
-from config.dependencies import get_session, get_client, get_current_user
-from config.crud import create_user
-from routes.email_processes import send_email_for_verify
-from routes.db_endpoints import create_user_endpoint
+from config.dependencies import get_session
+from services.email_auth import send_email_for_verify
+from services.user_services import create_user
 
 router = APIRouter(prefix='/login')
-
-
 
 @router.post("/token")
 async def login(session: Session = Depends(get_session), form_data: OAuth2PasswordRequestForm = Depends()):
@@ -37,9 +34,8 @@ async def login(session: Session = Depends(get_session), form_data: OAuth2Passwo
             detail={"message":"User with username does not exist"}
         )
 
-    # extract the user obj
     user = response["user"]
-    # save this in the fronent for local storage/ browser storage (or whatever it is called)
+    # save this in the fronent for local storage/ browser storage (or whatever it is called
     access_token = create_access_token(data={"username": user["username"]}) # auto calcs three hour epxirey
     return {
         "status_code":200,
@@ -66,7 +62,7 @@ async def sign_up(new_user: SignUpUser, session: Session = Depends(get_session))
         "email": email,
         "isActive": True,
     }
-    response = create_user_endpoint(session, user)
+    response = await create_user(user, session)
     if response["status_code"] != 200:
         details = {"message":response["message"]}
         raise HTTPException(status_code=500, detail=details)
@@ -74,10 +70,8 @@ async def sign_up(new_user: SignUpUser, session: Session = Depends(get_session))
     # if auth email send returns poor... raise
     send_autuh_email_response = await send_email_for_verify(new_user.email)
     if send_autuh_email_response["status_code"] != 200:
-        details = {"message":"could not send the email to auth. Incomplete status for making the user."}
+        details = {"message":f"could not send the email to auth. Detail: {send_autuh_email_response["message"]}."}
         raise HTTPException(status_code=send_autuh_email_response["status_code"],detail=details)
-    # if the above hits, the user is created, but not authed... so cant do anything...
-
 
     return {
         "status_code":200,

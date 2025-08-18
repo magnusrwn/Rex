@@ -1,53 +1,34 @@
+# all funcs are in services... just derive endpoints entirely our of funcs
+from services.email_auth import add_email_for_auth, send_email_for_verify, remove_email_for_auth
 from fastapi import APIRouter, Depends, HTTPException
+from sqlmodel import Session
 import os
 from dotenv import load_dotenv
-from sqlmodel import Session
-from models.sql_models import User
 from config.dependencies import get_session, get_current_user, get_client
-import httpx
-import smtplib
-from email.mime.text import MIMEText
-from routes.db_endpoints import add_email_for_auth, remove_email_for_auth
 
 load_dotenv()
 
 router = APIRouter(prefix='/email')
 
-@router.post('/send-email-for-verify')
-async def send_email_for_verify(email: str, client: httpx.AsyncClient = Depends(get_client)):
-    '''
-    Input: email
-    Output: None
-    '''
-    add_email_to_db_resp = await add_email_for_auth(email)
-    if add_email_to_db_resp["status_code"] != 200:
-        return {"status_code":200, "message":"error in adding email/ token to the db for verification. Try again later/ check types"}
+router.post('/start-email-auth')
+async def start_email_auth(email: str, session: Session = Depends(get_session)):
+    # first, add to db for auth
+    response = await add_email_for_auth(email, session)
+    if response['status_code'] != 200:
+        raise HTTPException(status_code=response['status_code'], detail=response['message'])
+    
+    # then, send the verification email
+    response = await send_email_for_verify(email)
+    if response['status_code'] != 200:
+        raise HTTPException(status_code=response['status_code'], detail=response['message'])
+    
+    return {"status_code":200, "message":"successfully sent veri-email"}
 
-
-    # send the email 
-    created_token = add_email_to_db_resp["token"]
-
-    sender = "me@example.com" # paid for sender
-    receiver = "email@email.example.com" # emial var 
-    subject = "MailHog Test -- Auth message"
-    body = "Hello, this is a test email sent to MailHog!\n\n" \
-    f"Your auth link is: https:example_linkhere:?token={created_token}" \
-    "If this was not you then kys"
-
-    # Create the message
-    msg = MIMEText(body)
-    msg["From"] = sender
-    msg["To"] = receiver
-    msg["Subject"] = subject
-
-    # Connect to MailHog SMTP (no auth needed)
-    smtp_server = "localhost"
-    smtp_port = 1025
-
-    with smtplib.SMTP(smtp_server, smtp_port) as server:
-        server.sendmail(sender, receiver, msg.as_string())
-
-    # temp log
-    print("Email sent to MailHog!")
-    return {"status_code":200, "message":"successfully sent auth email to user"}
+router.post('/finish-email-auth')
+async def finish_email_auth(email: str, token: str, session: Session = Depends(get_session)):
+    response = await remove_email_for_auth(email, token, session) # does both rempval and profile update
+    if response['status_code'] != 200:
+        raise HTTPException(status_code=response['status_code'], detail=response['message'])
+    
+    return {'status_code':200, 'message':'Email successfully authenticated. Processes have successfully run'}
 

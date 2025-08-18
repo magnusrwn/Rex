@@ -1,23 +1,19 @@
 # USER CRUD ONLY
 from models.sql_models import User
-from sqlmodel import Session, select, create_engine
+from sqlmodel import Session, select
 
 
 # will need password imports from 'security' file...
-def create_user(session:Session, u:dict) -> bool:
+def add_user_to_db(session:Session, u:User):
     try:
-        new_user = User(**u)
-        session.add(new_user)
+        session.add(u)
         session.commit()
-        session.refresh(new_user)
+        session.refresh(u)
         return {"status_code": 200}
     except Exception as e:
         return {"status_code":500, "message":f"Databsae error creating user. Return message: {e}"}
 
-def delete_user(session: Session, u: User):
-    '''
-    Just sets 'isActive to False
-    '''
+def user_soft_delete(session: Session, u: User):
     try:
         q = select(User).where(User.id == u.id)
         user = session.exec(q).first()
@@ -38,13 +34,6 @@ def delete_user(session: Session, u: User):
             "message":"databse encountereed an error in query. Please try again and/ or report the issue"
         }
 
-def change_username():
-    pass
 
-def change_email():
-    pass
-
-def change_password():
-    pass
 
 

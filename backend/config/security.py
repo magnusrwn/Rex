@@ -1,18 +1,11 @@
-from datetime import datetime, timedelta, timezone
-from typing import Annotated
-from models.sql_models import User, EmailAuth
+from datetime import datetime, timedelta
+from models.sql_models import User
 from dotenv import load_dotenv
 import os
 from models.base_model import *
 import jwt
-from fastapi import Depends, FastAPI, HTTPException, status
-from fastapi.security import OAuth2PasswordBearer, OAuth2PasswordRequestForm
-from jwt.exceptions import InvalidTokenError
-from pydantic import BaseModel
 from sqlmodel import Session, select, and_
-from Main import app
 from utils import get_user
-import secrets
 import bcrypt
 
 
