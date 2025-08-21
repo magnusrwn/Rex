@@ -1,24 +1,23 @@
-// import { useState } from 'react'
-// import reactLogo from './assets/react.svg'
-// import viteLogo from '/vite.svg'
-import { Outlet, NavLink } from "react-router-dom"
+import { createBrowserRouter, createRoutesFromElements, Route, RouterProvider } from 'react-router-dom'
+import RootLayout from './layout/RootLayout'
+import Home from './pages/Home'
+import Login from './pages/Login'
+import About from './pages/About'
 
 function App() {
+  const router = createBrowserRouter(
+    createRoutesFromElements(
+      <Route path='/' element={<RootLayout />}>
+        <Route index element={<Home />} />
+        <Route path='about' element={<About />} />
+        <Route path='login' element={<Login />} />
+      </Route>
+    )
+  )
   return (
-    <div className="min-h-screen">
-      {/* HEADER HERE */}
-      <header className="bg-gray-900 text-white p-4">
-        <nav className="container mx-auto flex gap-4">
-          <NavLink to="/" end className={({ isActive }) => isActive ? "font-bold" : ""}>
-            Home
-          </NavLink>
-        </nav>
-      </header>
-
-      <main className="container mx-auto p-6">
-        <Outlet /> {/* route children render here */}
-      </main>
-    </div>
+    <>
+      <RouterProvider router={router} />
+    </>
   )
 }
 
