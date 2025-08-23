@@ -1,6 +1,10 @@
+import LoginCard from "./Login"
+
 const Home = () => {
     return (
-        <h1>HOME</h1>
+        <>
+        <LoginCard cardHeadText="Head of card" cardBodyText="Body of card"/>
+        </>
     )
 }
 
