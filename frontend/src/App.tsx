@@ -4,6 +4,7 @@ import RootLayout from './layout/RootLayout'
 import Home from './pages/Home'
 import Login from './pages/Login'
 import About from './pages/About'
+import Register from './pages/Register'
 import 'react-toastify/dist/ReactToastify.css';
 
 function App() {
@@ -13,6 +14,7 @@ function App() {
         <Route index element={<Home />} />
         <Route path='about' element={<About />} />
         <Route path='login' element={<Login />} />
+        <Route path='register' element={<Register />} />        
       </Route>
     )
   )
