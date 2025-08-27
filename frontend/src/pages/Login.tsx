@@ -27,7 +27,10 @@ const LoginCard = () => {
     const navigate = useNavigate()
 
     return(
-        <div className='h-[80vh] flex justify-center items-center font-mono text-gray-600'>
+    <>
+        {/* temporary solution.... */}
+        <div className='pt-60'></div>
+        <div className=' flex justify-center items-center font-mono text-gray-600'>
             <div className='h-[50vh] w-[40vh] border-2 shadow-xl border-gray-200'>
                 <div className='ml-1 mt-16'>
                     <h1 className='mt-2 mb-8 ml-4 text-5xl underline underline-offset-6' >Login.</h1>
@@ -50,6 +53,7 @@ const LoginCard = () => {
                 </div>
             </div>
         </div>
+    </>
     )
 }
 

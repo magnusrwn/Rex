@@ -12,6 +12,9 @@ const RegisterCard = () =>{
     const navigate = useNavigate()
 
     return(
+    <>
+        {/* temporary solution.... */}
+        <div className='pt-60'></div>
         <div className='h-[80vh] flex justify-center items-center font-mono text-gray-600'>
             <div className='h-[50vh] w-[40vh] border-2 shadow-xl border-gray-200'>
                 <div className='ml-1 mt-16'>
@@ -39,6 +42,7 @@ const RegisterCard = () =>{
                 </div>
             </div>
         </div>
+    </>
     )
 }
 
