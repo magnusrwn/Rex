@@ -1,13 +1,10 @@
-# maybe import from dependancies? [make dependancies.py]
+import httpx
+from config.dependencies import get_session, get_current_user
 from sqlmodel import Session
 from models.base_model import *
 from models.sql_models import *
 from Main import app
-from fastapi import routing, APIRouter, HTTPException
-from sqlmodel import select, and_
-from sqlite3 import DatabaseError
+from fastapi import routing, APIRouter, HTTPException, Depends
+from services.email_auth import *
 
-router = APIRouter(prefix='/db')
-
-
-# # endpoints half-done !!!!!! (mostly mock data)
+router = APIRouter()

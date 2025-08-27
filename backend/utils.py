@@ -4,10 +4,8 @@ from dotenv import load_dotenv
 import os
 import asyncio
 from typing import Optional
-from sqlmodel import Session, select, and_
+from sqlmodel import Session, select
 from sqlite3 import DatabaseError
-from fastapi import Depends
-from config.dependencies import get_session
 from models.sql_models import User
 
 load_dotenv()
@@ -37,7 +35,7 @@ def encrypt_fernet(s:bytes, process:Optional[str]):
     else:
         raise ValueError(f"Unable to decrypt the string. Process{process}" if process else "Unable to decrypt the string. Process")
 
-def decrypt_fernet(s:bytes, process:Optional[str]):
+def decrypt_fernet(s:bytes, process:Optional[str] | None = None):
     fernet_obj = init_fernet()
     decrypted_string = fernet_obj.decrypt(s)
     if decrypted_string:
@@ -45,13 +43,13 @@ def decrypt_fernet(s:bytes, process:Optional[str]):
     else:
         raise ValueError(f"Unable to decrypt the string. Process{process}" if process else "Unable to decrypt the string. Process")
 
-def get_user(session: Session, username:str, email:str) -> dict:
+def get_user(session: Session, username:str) -> dict:
     '''
-    Inps: email:str, username:str
+    Inps: username:str
     Output: dict (of User db obj)
     '''
     try:
-        q = select(User).where(and_(User.username == username, User.email == email))
+        q = select(User).where(User.username == username)
         user = session.exec(q).first()
         if user: return user.model_dump()
         return None
