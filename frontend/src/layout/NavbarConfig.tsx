@@ -165,7 +165,7 @@ const CardNav: React.FC<CardNavProps> = ({
     >
       <nav
         ref={navRef}
-        className={`card-nav ${isExpanded ? "open" : ""} block h-[40px] rounded-4xl md:h-[60px] p-0 shadow-lg relative overflow-hidden will-change-[height]`}
+        className={`card-nav ${isExpanded ? "open" : ""} block rounded-4xl h-[40px] md:h-[60px] p-0 shadow-lg relative overflow-hidden will-change-[height]`}
         style={{ backgroundColor: baseColor }}
       >
         <div className="bg-slate-50 card-nav-top absolute inset-x-0 top-0 h-[40px] md:h-[60px] flex items-center justify-between p-2 pl-[1.1rem] z-[2]">
@@ -197,14 +197,14 @@ const CardNav: React.FC<CardNavProps> = ({
             ">Fufilled</h1>
           </div>
           <Button variant="primary" className="
-           px-0.5 py-0.5 rounded-lg
+           px-0.5 py-0.5 rounded-2xl
            md:px-2 md:py-1 md:mr-2
           ">Login</Button>
 
         </div>
 
         <div
-          className={`card-nav-content absolute left-0 right-0 h-[40px] md:h-[60px] bottom-0 p-2 flex flex-col items-stretch gap-2 justify-start z-[1] ${
+          className={`card-nav-content absolute left-0 right-0 h-[75%] md:h-[90%] bottom-0 md:mx-2 md:mb-0.5 mb-3 p-2 flex flex-col items-stretch gap-2 justify-start z-[1] ${
             isExpanded
               ? "visible pointer-events-auto"
               : "invisible pointer-events-none"
@@ -214,9 +214,9 @@ const CardNav: React.FC<CardNavProps> = ({
           {(items || []).slice(0, 3).map((item, idx) => (
             <div
               key={`${item.label}-${idx}`}
-              className="nav-card select-none relative flex flex-col gap-2 p-[12px_16px] rounded-[calc(0.75rem-0.2rem)] min-w-0 flex-[1_1_auto] h-auto min-h-[40px] md:h-full md:min-h-0 md:flex-[1_1_0%]"
+              className="nav-card select-none relative flex flex-col gap-2 p-[12px_16px] rounded-[calc(0.75rem-0.2rem)] min-w-0 flex-[1_1_auto] h-auto md:h-[80%] md:min-h-0 md:flex-[1_1_0%] text-white bg-slate-900 hover:bg-black transition-colors duration-300"
               ref={setCardRef(idx)}
-              style={{ backgroundColor: item.bgColor, color: item.textColor }}
+              // style={{ backgroundColor: item.bgColor, color: item.textColor }}
             >
               <div className="nav-card-label font-normal tracking-[-0.5px] text-[18px] md:text-[22px]">
                 {item.label}
