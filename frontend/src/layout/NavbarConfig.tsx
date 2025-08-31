@@ -1,13 +1,13 @@
 import React, { useLayoutEffect, useRef, useState } from "react";
 import { gsap } from "gsap";
-// use your own icon import if react-icons is not available
 import { GoArrowUpRight } from "react-icons/go";
 import Button from "../components/Button";
+import { useNavigate } from "react-router-dom";
 
 type CardNavLink = {
   label: string;
-  href: string;
   ariaLabel: string;
+  reDirTo?: string;
 };
 
 export type CardNavItem = {
@@ -159,6 +159,8 @@ const CardNav: React.FC<CardNavProps> = ({
     if (el) cardsRef.current[i] = el;
   };
 
+  const navigate = useNavigate()
+
   return (
     <div
       className={`card-nav-container h-[40px] absolute left-1/2 -translate-x-1/2 w-[90%] max-w-[800px] z-[99] top-[1.2em] md:top-[2em] ${className}`}
@@ -168,7 +170,7 @@ const CardNav: React.FC<CardNavProps> = ({
         className={`card-nav ${isExpanded ? "open" : ""} block rounded-4xl h-[40px] md:h-[60px] p-0 shadow-lg relative overflow-hidden will-change-[height]`}
         style={{ backgroundColor: baseColor }}
       >
-        <div className="bg-slate-50 card-nav-top absolute inset-x-0 top-0 h-[40px] md:h-[60px] flex items-center justify-between p-2 pl-[1.1rem] z-[2]">
+        <div className="bg-slate-50 hover:bg-slate-100 transition-colors duration-500 card-nav-top absolute inset-x-0 top-0 h-[40px] md:h-[60px] flex items-center justify-between p-2 pl-[1.1rem] z-[2]">
           <div
             className={`hamburger-menu ${isHamburgerOpen ? "open" : ""} group h-full flex flex-col items-center justify-center cursor-pointer gap-[6px] order-2 md:order-none`}
             onClick={toggleMenu}
@@ -189,8 +191,8 @@ const CardNav: React.FC<CardNavProps> = ({
             />
           </div>
 
-          <div className="logo-container hover:cursor-pointer text-xl md:text-3xl font-mono flex items-center md:absolute md:left-1/2 md:top-1/2 md:-translate-x-1/2 md:-translate-y-1/2 order-1 md:order-none"
-              onClick> {/* GET THIS DONE HERE */}
+          <div
+           className="logo-container hover:cursor-pointer text-xl md:text-3xl font-mono flex items-center md:absolute md:left-1/2 md:top-1/2 md:-translate-x-1/2 md:-translate-y-1/2 order-1 md:order-none" onClick={()=> navigate('/')} >
             <h1 className="
              text-xl
              font-serif
@@ -199,7 +201,9 @@ const CardNav: React.FC<CardNavProps> = ({
           <Button variant="primary" className="
            px-0.5 py-0.5 rounded-2xl
            md:px-2 md:py-1 md:mr-2
-          ">Login</Button>
+          "
+          onClick={()=> navigate('/login')}
+          >Login</Button>
 
         </div>
 
@@ -214,26 +218,29 @@ const CardNav: React.FC<CardNavProps> = ({
           {(items || []).slice(0, 3).map((item, idx) => (
             <div
               key={`${item.label}-${idx}`}
-              className="nav-card select-none relative flex flex-col gap-2 p-[12px_16px] rounded-[calc(0.75rem-0.2rem)] min-w-0 flex-[1_1_auto] h-auto md:h-[80%] md:min-h-0 md:flex-[1_1_0%] text-white bg-slate-900 hover:bg-black transition-colors duration-300"
+              className="nav-card select-none relative flex flex-col gap-2 p-[12px_16px] rounded-[calc(0.75rem-0.2rem)] min-w-0 flex-[1_1_auto] h-auto md:h-[80%] md:min-h-0 md:flex-[1_1_0%] text-white bg-black hover:bg-slate-900 transition-colors duration-300"
               ref={setCardRef(idx)}
-              // style={{ backgroundColor: item.bgColor, color: item.textColor }}
             >
               <div className="nav-card-label font-normal tracking-[-0.5px] text-[18px] md:text-[22px]">
                 {item.label}
               </div>
               <div className="nav-card-links mt-auto flex flex-col gap-[2px]">
-                {item.links?.map((lnk, i) => (
+                {item.links?.map((dp, i) => (
                   <a
-                    key={`${lnk.label}-${i}`}
+                    key={`${dp.label}-${i}`}
                     className="nav-card-link inline-flex items-center gap-[6px] no-underline cursor-pointer transition-opacity duration-300 hover:opacity-75 text-[15px] md:text-[16px]"
-                    href={lnk.href}
-                    aria-label={lnk.ariaLabel}
-                  >
+                    aria-label={dp.ariaLabel}
+                    {...(dp.reDirTo ? { onClick: ()=>{ if (dp.reDirTo){
+                      navigate(dp.reDirTo)
+                    } else {
+                      alert('This link goes nowhere. Please contact the dev/ raise the issue, Thank you!')
+                    }}, role: "button", tabIndex: 0 } : {})}
+                    >
                     <GoArrowUpRight
                       className="nav-card-link-icon shrink-0"
                       aria-hidden="true"
                     />
-                    {lnk.label}
+                    {dp.label}
                   </a>
                 ))}
               </div>

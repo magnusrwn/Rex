@@ -5,25 +5,6 @@ import { useNavigate } from 'react-router-dom';
 
 
 const LoginCard = () => {
-    // const [user, setUser] = useState({
-    //     "username":"",
-    //     "password":""
-    // })
-
-    // const handleSubmit = (e)=>{
-    //     e.preventDefault();
-    //     console.log(user)
-    //     // const u = user;
-    //     // send to backend, get a response, then handle
-    // }
-
-    // const handleChange = (e) =>{
-    //     const name = e.target.name
-    //     const value = e.target.value
-
-    //     setUser({...user, [name]:value})
-    // }
-
     const navigate = useNavigate()
 
     return(
