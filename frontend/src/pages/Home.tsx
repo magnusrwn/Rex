@@ -91,6 +91,7 @@ const Home = () => {
             '
              title='Centralised Fulfillment'
              description='I will figure this later'
+             onClick={()=>navigate('register')}
             />
             <Card
              className='
@@ -100,7 +101,7 @@ const Home = () => {
             '
              title='Get Started!'
              description='Lorem ipsum dolor sit amet, consectetur adipiscing elit. Etiam pulvinar sit amet mauris venenatis porttitor. Ut condimentum auctor est eget vestibulum. Maecenas quis ultricies nibh. Cras convallis laoreet leo vel ultricies. Mauris sed nunc purus. Etiam dictum eros odio, in lobortis mi ultrices in. Mauris faucibus nec neque ut porta. Nulla eget eros augue.'
-             onClick={() => {}}
+             onClick={()=>navigate('register')}
             />
             <Card
              className='
@@ -110,6 +111,7 @@ const Home = () => {
             '
              title='Unfied Sales Data'
              description='I will figure this later'
+             onClick={()=>navigate('register')}
             />
             {/* <Card title='Informed support' description='I will figure this later' /> */}
         </div>

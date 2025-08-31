@@ -18,13 +18,20 @@ const LoginCard = () => {
              text-white
             '>
                 <div className='h-full my-15 mx-10 flex flex-col'>
-                    <div className='flex-row h-[30%] text-6xl font-semibold'>Login</div>
+                    <div className='flex-row h-[20%] text-6xl font-bold underline underline-offset-4'>Login</div>
                     <div className='flex-row h-[40%]'>
-                        <form>
-                            {/* FINISH THIS FORM */}
+                        <form className='gird grid-rows-2'>
+                            <div className='grid grid-rows-2 mb-10'>
+                                <label htmlFor="username" className='text-2xl font-semibold'>Username:</label>
+                                <input type="text" name="username" className='pl-2 text-black bg-white rounded-xl'/>
+                            </div>
+                            <div className='grid grid-rows-2'>
+                                <label htmlFor="password" className='text-2xl font-semibold'>Password:</label>
+                                <input type="password" name="password" className='pl-2 text-black bg-white rounded-xl'/>
+                            </div>
                         </form>
                     </div>
-                    <div className='flex-row h-[30%]'>
+                    <div className='flex-row pt-5'>
                         <div className='grid grid-cols-2 grid-rows-1 gap-10 text-xl font-semibold'>
                             <Button
                              variant='primary'
