@@ -12,37 +12,41 @@ const RegisterCard = () =>{
     const navigate = useNavigate()
 
     return(
-    <>
-        {/* temporary solution.... */}
-        <div className='pt-60'></div>
-        <div className='h-[80vh] flex justify-center items-center font-mono text-gray-600'>
-            <div className='h-[50vh] w-[40vh] border-2 shadow-xl border-gray-200'>
-                <div className='ml-1 mt-16'>
-                    <h1 className='mt-2 mb-8 ml-4 text-5xl underline underline-offset-6' >Register.</h1>
-                </div>
-                <div className='mx-5 text-xl h-fit'>
-                    <form>
-                        <div className='pb-5'>
-                            <label htmlFor='email'>Email: </label>
-                            <input type='text' name='email' className='border-1 px-2 w-[100%]'></input>
+        <div className='min-h-[800px] h-[100vh] w-full flex justify-center items-center mt-5'>
+            <div className='
+             rounded-2xl
+             w-[80%] h-[60%]
+             md:w-[500px] md:h-[600px]
+             bg-white
+             shadow-2xl
+             text-black
+            '>
+                <div className='h-full my-15 mx-10 flex flex-col'>
+                    <div className='flex-row h-[30%] text-6xl font-semibold'>Register</div>
+                    <div className='flex-row h-[40%]'>
+                        <form>
+                            {/* FINISH THIS FORM */}
+                        </form>
+                    </div>
+                    <div className='flex-row h-[30%]'>
+                        <div className='grid grid-cols-2 grid-rows-1 gap-10 text-xl font-semibold'>
+                            <Button
+                             variant='primary'
+                             className='py-3 rounded-2xl shadow-md'
+                             onClick={()=> navigate('/')} // MAKE THIS WORK... I GUESS IT WILL BE A WHILE MAYBE...
+                            >Register!
+                            </Button>
+                            <Button
+                             variant='secondary'
+                             className='bg-white py-3 rounded-2xl hover:text-slate-800'
+                             onClick={()=> navigate('/login')}
+                            >Login
+                            </Button>
                         </div>
-                        <div className='pb-5'>
-                            <label htmlFor='username'>Username: </label>
-                            <input type='text' name='username' className='border-1 px-2 w-[100%]'></input>
-                        </div>
-                        <div className='pb-5'>
-                            <label htmlFor='password'>Password: </label>
-                            <input type='password' name='password' className='border-1 px-2 w-[100%]'></input>
-                        </div>
-                        <div className='flex flex-row gap-[10%] mt-8 w-full'>
-                            <Button className='px-4 w-[45%] py-1 text-2xl' type='submit' variant='primary'>Continue</Button>
-                            <Button className='px-4 w-[45%] py-1 text-2xl' onClick={() => {navigate('/login')}} variant='secondary'>Login</Button> {/* FIGURE ONCLICK FOR THIS */ }
-                        </div>
-                    </form>
+                    </div>
                 </div>
             </div>
         </div>
-    </>
     )
 }
 

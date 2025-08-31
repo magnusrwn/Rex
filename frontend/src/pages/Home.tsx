@@ -9,7 +9,7 @@ const Home = () => {
     return (
     <>
     {/* giving col space for everything to be in */}
-    <div className="flex flex-col items-center max-w-4xl lg:mx-auto md:mx-20 mx-10 mt-24" id="container">
+    <div className="min-h-[800px] flex flex-col items-center max-w-4xl lg:mx-auto md:mx-20 mx-10 mt-24">
         {/* HERO SECTION */}
         <div className="
             flex flex-col pt-2
