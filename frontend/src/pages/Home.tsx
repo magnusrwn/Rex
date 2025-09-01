@@ -3,11 +3,13 @@ import Button from '../components/Button'
 import Card from '../components/Card'
 import Footer from '../components/Footer'
 import { useNavigate } from 'react-router-dom'
+import Navbar from '../layout/Navbar'
 
 const Home = () => {
     const navigate = useNavigate()
     return (
     <>
+    <Navbar />
     {/* giving col space for everything to be in */}
     <div className="min-h-[800px] flex flex-col items-center max-w-4xl lg:mx-auto md:mx-20 mx-10 mt-24">
         {/* HERO SECTION */}

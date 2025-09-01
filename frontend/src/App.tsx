@@ -1,10 +1,11 @@
-import { ToastContainer } from 'react-toastify/unstyled'
+import { ToastContainer } from 'react-toastify'
 import { createBrowserRouter, createRoutesFromElements, Route, RouterProvider } from 'react-router-dom'
 import RootLayout from './layout/RootLayout'
 import Home from './pages/Home'
 import Login from './pages/Login'
 import About from './pages/About'
 import Register from './pages/Register'
+import AuthLinkPage from './pages/auth_pages/AuthPage'
 import 'react-toastify/dist/ReactToastify.css';
 
 function App() {
@@ -14,25 +15,26 @@ function App() {
         <Route index element={<Home />} />
         <Route path='about' element={<About />} />
         <Route path='login' element={<Login />} />
-        <Route path='register' element={<Register />} />        
+        <Route path='register' element={<Register />} />
+        <Route path='auth/:token' element={<AuthLinkPage />} />
       </Route>
     )
   )
   return (
     <>
-        <ToastContainer
-          position="top-right"
-          autoClose={5000}
-          hideProgressBar={false}
-          newestOnTop={false}
-          closeOnClick
-          rtl={false}
-          pauseOnFocusLoss
-          draggable
-          pauseOnHover
-          theme="light"
-        />
       <RouterProvider router={router} />
+      <ToastContainer
+        position="top-right"
+        autoClose={5000}
+        hideProgressBar={false}
+        newestOnTop={false}
+        closeOnClick
+        rtl={false}
+        pauseOnFocusLoss
+        draggable
+        pauseOnHover
+        theme="light"
+      />
     </>
   )
 }

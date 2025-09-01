@@ -1,13 +1,15 @@
 // import { useState } from 'react';
 import Button from '../components/Button';
 import { useNavigate } from 'react-router-dom';
-// import Toast from '../components/Toast';
+import Navbar from '../layout/Navbar';
 
 
 const LoginCard = () => {
     const navigate = useNavigate()
 
     return(
+    <>
+        <Navbar />
         <div className='min-h-[800px] h-[100vh] w-full flex justify-center items-center mt-5'>
             <div className='
              rounded-2xl
@@ -50,6 +52,7 @@ const LoginCard = () => {
                 </div>
             </div>
         </div>
+    </>
     )
 }
 
