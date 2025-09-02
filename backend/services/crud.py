@@ -5,6 +5,10 @@ from sqlmodel import Session, select
 
 # will need password imports from 'security' file...
 def add_user_to_db(session:Session, u:User):
+    """
+    Input: session, user[User]
+    Output: {"status_code":200} OR {"status_code":500, "message":string}
+    """
     try:
         session.add(u)
         session.commit()

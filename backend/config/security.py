@@ -37,6 +37,7 @@ def create_access_token(data: dict):
 
 def authenticate_user(session: Session, username: str, password: str) -> dict:
     '''
+    Ensures users details are unique
     Input: session, username, password
     Output: {"status_code":int, "user":User}
     '''

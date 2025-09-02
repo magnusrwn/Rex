@@ -10,6 +10,7 @@ load_dotenv()
 
 router = APIRouter(prefix='/email')
 
+# ONLY NEEDED IF EMAIL IS CHANGED... (auth handled in create_user endpoint... (to point of sending))
 router.post('/start-email-auth')
 async def start_email_auth(email: str, session: Session = Depends(get_session)):
     # first, add to db for auth
@@ -21,13 +22,15 @@ async def start_email_auth(email: str, session: Session = Depends(get_session)):
     response = await send_email_for_verify(email)
     if response['status_code'] != 200:
         raise HTTPException(status_code=response['status_code'], detail=response['message'])
-    
-    return {"status_code":200, "message":"successfully sent veri-email"}
+    return {"status_code":200, "message":"successfully sent verification email"}
 
+# USE WHEN THEY LAND ON AUTH PAGE
 router.post('/finish-email-auth')
 async def finish_email_auth(email: str, token: str, session: Session = Depends(get_session)):
+
     response = await remove_email_for_auth(email, token, session) # does both rempval and profile update
     if response['status_code'] != 200:
+        # if the auth details can not be found
         raise HTTPException(status_code=response['status_code'], detail=response['message'])
     
     return {'status_code':200, 'message':'Email successfully authenticated. Processes have successfully run'}

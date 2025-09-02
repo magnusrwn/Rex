@@ -21,7 +21,7 @@ class UserPublic(BaseModel):
 class UserInDB(UserPublic):
     hashed_password: str
 
-class SignUpUser(BaseModel):
+class RegisterUser(BaseModel):
     email: str
     username: str
     password: str

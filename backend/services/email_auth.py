@@ -8,6 +8,10 @@ from sqlmodel import select, and_
 import secrets
 import smtplib
 from email.mime.text import MIMEText
+import os
+from dotenv import load_dotenv
+
+load_dotenv()
 
 async def remove_email_for_auth(email:str, token:str, session: Session):
     '''
@@ -18,11 +22,11 @@ async def remove_email_for_auth(email:str, token:str, session: Session):
     # clears profile from auth table
     dp_to_remove = select(EmailAuth).where(and_(EmailAuth.email == email, EmailAuth.token == token))
     if not dp_to_remove:
-        return {"status_code":400, "message":"Could not find user in the databse"}
+        return {"status_code":400, "message":"Could not find user in the email auth"}
     session.delete(dp_to_remove)
     session.commit()
 
-    # manages User table
+    # Changes user to be authed on 'User' table
     q = select(User).where(User.email == email)
     user = session.exec(q).first()
     if user:
@@ -31,8 +35,8 @@ async def remove_email_for_auth(email:str, token:str, session: Session):
         session.commit()
     else:
         return {"status_code":400, "message":"User not found in User table"}
-
-    return {"status_code":200, "message":"dp successfully removed form the db"}
+    
+    return {"status_code":200, "message":"dp successfully removed form the db, and authed email in User table"}
 
 async def add_email_for_auth(email: str, session: Session = Depends(get_session)):
     '''
@@ -53,23 +57,25 @@ async def add_email_for_auth(email: str, session: Session = Depends(get_session)
         session.refresh(data_to_db)
         return {
             "status_code":200,
-            "message":"sucessfully added email and tokn to db. Ready for auth",
             "token": new_tok
             }
     except Exception as e:
         return {"status_code":500, "message":f"failed to add token to the db. Probably a type error... Details: {e}"}
 
-async def send_email_for_verify(token: str):
+async def send_email_for_verify(token: str, email:str):
     '''
-    Input: email
+    Input: email, token
     Output: None
     '''
     try:
-        sender = "me@example.com" # paid for sender
-        receiver = "email@email.example.com" # emial var 
-        subject = "MailHog Test -- Auth message"
+        frontend_base_url = os.environ("FRONTEND_BASE_URL")
+        url = f"{frontend_base_url}/auth/:{token}"
+        sender = "me@example.com" # ME... OR THE THING ILL HAVE TO PAY FOR
+        receiver = "email@email.example.com" # USE EMAIL VAR !! 
+        #receiver = email
+        subject = "Fuffiled Email Verification Link"
         body = "Hello, this is a test email sent to MailHog!\n\n" \
-        f"Your auth link is: https:example_linkhere:?token={token}" \
+        f"Your auth link is: {url}" \
         "If this was not you then kys"
 
         # Create the message

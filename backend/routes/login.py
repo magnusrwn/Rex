@@ -43,31 +43,36 @@ async def login(session: Session = Depends(get_session), form_data: OAuth2Passwo
         "message":"successfully logged user in. Returned token."
     }
 
-@router.post('/signup')
-async def sign_up(new_user: SignUpUser, session: Session = Depends(get_session)):
+@router.post('/register')
+async def register(new_user: RegisterUser, session: Session = Depends(get_session)):
+    # checks if the user exists currently (any field entered... [username, email])
     user_exist = check_user_exists(session, new_user.email, new_user.username)
-    # returns response code
+    # handle response from the check
     if user_exist["status_code"] != 200:
         details = {"message":user_exist["message"]}
         raise HTTPException(status_code=user_exist["status_code"], detail=details)
     
-    # hashing the inputed password/ detail gathering
+
+    # hash password, and gather details to send to db
     hashed_password = get_password_hash(new_user.password)
     username = new_user.username
     email = new_user.email
 
+    # prepping payload
     user = {
         "username": username,
         "hashed_password": hashed_password,
         "email": email,
         "isActive": True,
     }
+    # send the payload, checking response of database request (checking to see if everything went ok in adding. anew user)
     response = await create_user(user, session)
-    if response["status_code"] != 200:
+    if response["status_code"] != 200:  # if unsuccessfull raise db error
         details = {"message":response["message"]}
         raise HTTPException(status_code=500, detail=details)
     
-    # if auth email send returns poor... raise
+    # !NOTE!!NOTE!!NOTE!!NOTE!!NOTE!!NOTE!!NOTE!!NOTE!!NOTE!!NOTE!!NOTE!!NOTE!!NOTE!!NOTE!!NOTE!!NOTE!!NOTE!!NOTE!!NOTE!!NOTE!
+    # send auth email after signup
     send_autuh_email_response = await send_email_for_verify(new_user.email)
     if send_autuh_email_response["status_code"] != 200:
         details = {"message":f"could not send the email to auth. Detail: {send_autuh_email_response["message"]}."}
