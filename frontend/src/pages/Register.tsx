@@ -3,6 +3,7 @@ import Button from '../components/Button';
 import { useNavigate } from 'react-router-dom';
 import { toast } from 'react-toastify';
 import Navbar from '../layout/Navbar';
+import { axiosAuthed, tryCatch } from '../utils';
 //
 // FIX THE TOAST ON PAGE SWITCH
 //
@@ -87,16 +88,36 @@ const RegisterCard = () =>{
         return true
     }
 
-    const handleRegistration = (e?: React.FormEvent) => {
+    const handleRegistration = async (e?: React.FormEvent) => {
+        // Resetting the reg lines on the form (red lines are for errs)
         setFieldErr({
             username: true,
             email: true,
             password: true,
         })
+
+        // verifying input. If it fails, verification then stop
         if (e) {e.preventDefault()}
-        const response: boolean = verifyInput()
-        if (!response) return
-        console.log('yay')
+        const verifyResponse: boolean = verifyInput()
+        if (!verifyResponse) return
+
+        // Defining vars
+        const url = '/register'
+        const payload = {
+            email: newUser.email,
+            username: newUser.username,
+            password: newUser.password
+        }
+
+        // Creating promise
+        const axiAuthed = axiosAuthed()
+        const promise = axiAuthed.post(url, payload)
+
+        // Sending request
+        const registerResponse = await tryCatch(promise)
+
+        // Handle request responses
+        
     }
 
     return(

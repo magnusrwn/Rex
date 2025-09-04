@@ -27,8 +27,7 @@ class Settings(BaseSettings):
     FERNET_KEY: str # must be encoded to bytes
 
     # Url bases
-    FRONTEND_BASE_URL = str
-    BACKEND_BASE_URL = str
+    FRONTEND_BASE_URL: str
 
 
     
